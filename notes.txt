@@ -1,0 +1,13 @@
+initial ideas:
+	Datalogger writes to text file/csv, and database entries are loaded in every minute
+		Collect high/low from PIR on GPIO 17 (wiringPi 0)
+			Use interrupts and timers to count time between samples
+			If a sample stays high after the duration that the previous result turned low in, report that as a "blocked"
+		Collect serial data from Nucleo & photoresistor
+			import serial
+			import csv
+		Collect I2C data from temp & humidity sensor
+			???
+			Start by reading sample code from Adafruit
+		
+
