@@ -14,7 +14,7 @@ from matplotlib import style
 
 style.use('fivethirtyeight')
 
-savefig.format = "png"
+plt.savefig.format = "png"
 
 conn = sqlite3.connect('my.db')
 c = conn.cursor()
@@ -30,7 +30,13 @@ def read_from_db():
 		print(row)
 
 def graph_data(col):
-	c.execute(f'SELECT {columns[0]},{columns[col]} FROM {db_name};')
+	if col == 2:
+		parameter = 17.5
+		c.execute(f'SELECT {columns[0]},{columns[col]} FROM {db_name} WHERE {columns[col]} > {parameter};')
+	else:
+		parameter = 4096
+		c.execute(f'SELECT {columns[0]},{columns[col]} FROM {db_name} WHERE {columns[col]} < {parameter};')
+	
 	data = c.fetchall()
 
 	time = []
@@ -43,8 +49,8 @@ def graph_data(col):
 	plt.xlabel('%s' % columns[0])
 	plt.ylabel('%s' % columns[col])
 	
+	plt.clf()
 	plt.plot(time,values,'-')
-#	plt.show()
 	plt.savefig(f'/var/www/html/{columns[col]}.png')
 
 read_from_db()
