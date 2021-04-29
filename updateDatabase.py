@@ -3,16 +3,21 @@
 import sqlite3
 import pandas as pd
 from pandas import DataFrame
+import os, shutil
 
 conn = sqlite3.connect('my.db')  
 c = conn.cursor()
 
-read_clients = pd.read_csv (r'./data.csv.old')
-read_clients.to_sql('Datalogger', conn, if_exists='append', index = False) # Insert the values from the csv file into the table 'CLIENTS' 
+data_csv = r'./testLog.csv'
+template_path = r'./legend.txt'
+read_clients = pd.read_csv (data_csv)
+read_clients.to_sql('Datalogger', conn, if_exists='append', index = False) # Insert the values from the csv file into the table 'Datalogger' 
 
-# When reading the csv:
-# - Place 'r' before the path string to read any special characters, such as '\'
-# - Don't forget to put the file name at the end of the path + '.csv'
-# - Before running the code, make sure that the column names in the CSV files match with the column names in the tables created and in the query below
-# - If needed make sure that all the columns are in a TEXT format
-
+os.remove(data_csv)
+# template_fd = os.open(template_path, os.O_RDONLY)
+# file_size = os.path.getsize(template_path)
+# duplicate_fd = os.open(data_csv, os.O_RDWR | os.O_CREAT)
+# os.sendfile(template_fd,duplicate_fd, 0, file_size) # offset is 0
+shutil.copy2(template_path,data_csv)
+# print(os.read(template_fd,os.path.getsize(template_path)))
+# print(template_path,os.path.getsize(template_path))
