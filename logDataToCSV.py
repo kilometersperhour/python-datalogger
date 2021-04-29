@@ -5,28 +5,11 @@
 # Program: logDataToCSV.py
 # Purpose: Collect data from four sensors and save as CSV file for later storage in database
 
-#TODO: Still isn't reading anything. Fix that.
+import serial, string 		# for reading serial data from photoresistor
+import csv, time 		# for saving to csv, + datestamps
+import board, adafruit_ahtx0	# i2c imports from Adafruit example code for AHTx0
 
-# import serial
-# import time
-
-# with serial.Serial('/dev/ttyACM0', 115200, timeout=1) as ser:
-
-#	print('Writing...')
-#	ser.write(b'poggers\n')		# write a line to return a line
-#	print('Written. Reading...')
-#	time.sleep(1)
-#	ser_bytes = ser.readline()	# read a line
-#	print('Read. Printing...')
-#	print(ser_bytes)		# print what was read
-#	time.sleep(2)			# repeat in two seconds
-
-import serial, csv
-import time
-import board
-import adafruit_ahtx0
-
-filename = "t_h_data.csv"
+filename = "data.csv"
 
 # Create sensor object, communicating over the board's default I2C bus
 i2c = board.I2C()
@@ -45,3 +28,12 @@ while True:
 		print("KeyboardInterrupt\n")
 		break
 	time.sleep(1)
+
+with serial.Serial('/dev/ttyACM0', 115200, timeout=1) as ser:
+
+	while True:
+		ser.write(b'o')						# write a line to return a line
+		ser_bytes = ser.readline()				# read a line
+		print(ser_bytes.decode("utf-8","strict").rstrip())	# pretty-print what was read
+		time.sleep(1)						# repeat in one second
+
