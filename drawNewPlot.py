@@ -14,37 +14,43 @@ from matplotlib import style
 
 style.use('fivethirtyeight')
 
+savefig.format = "png"
+
 conn = sqlite3.connect('my.db')
 c = conn.cursor()
 
 columns = ('Unix_Time','Temperature','Relative_Humidity','Ambient_Light','PIR_Voltage')
 db_name = "Datalogger"
-# referenced pythonprogramming.net
 
 def read_from_db():
-        c.execute('SELECT * FROM (?)',(Datalogger))
-        data = c.fetchall()
-        print(data)
-        for row in data:
-                print(row)
+	c.execute('SELECT * FROM %s;' % db_name)
+	data = c.fetchall()
+	print(data)
+	for row in data:
+		print(row)
 
-def graph_data(int col):
-        c.execute('SELECT (?,?) FROM Datalogger', (columns[0] columns[col])
-        data = c.fetchall()
+def graph_data(col):
+	c.execute(f'SELECT {columns[0]},{columns[col]} FROM {db_name};')
+	data = c.fetchall()
 
-        time = []
-        values = []
+	time = []
+	values = []
 
-        for row in data:
-                dates.append(parser.parse(row[0]))
-                values.append(row[1])
-
-        plt.xlabel('%s' % columns[0])
-        plt.ylabel('%s' % columns[col])
-
-        plt.plot_date(dates,values,'-')
-        plt.show
+	for row in data:
+		time.append(row[0])
+		values.append(row[1])
+		
+	plt.xlabel('%s' % columns[0])
+	plt.ylabel('%s' % columns[col])
+	
+	plt.plot(time,values,'-')
+#	plt.show()
+	plt.savefig(f'/var/www/html/{columns[col]}.png')
 
 read_from_db()
+graph_data(1)
+graph_data(2)
+graph_data(3)
+graph_data(4)
 c.close()
 conn.close()
