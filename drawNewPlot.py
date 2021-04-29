@@ -22,13 +22,6 @@ c = conn.cursor()
 columns = ('Unix_Time','Temperature','Relative_Humidity','Ambient_Light','PIR_Voltage')
 db_name = "Datalogger"
 
-def read_from_db():
-	c.execute('SELECT * FROM %s;' % db_name)
-	data = c.fetchall()
-	print(data)
-	for row in data:
-		print(row)
-
 def graph_data(col):
 	if col == 2:
 		parameter = 17.5
@@ -38,7 +31,8 @@ def graph_data(col):
 		c.execute(f'SELECT {columns[0]},{columns[col]} FROM {db_name} WHERE {columns[col]} < {parameter};')
 	
 	data = c.fetchall()
-
+	print(f"Data fetched for {columns[col]}")
+	
 	time = []
 	values = []
 
@@ -46,17 +40,15 @@ def graph_data(col):
 		time.append(row[0])
 		values.append(row[1])
 		
+	plt.clf()
+	plt.plot(time,values,'-')
 	plt.xlabel('%s' % columns[0])
 	plt.ylabel('%s' % columns[col])
 	
-	plt.clf()
-	plt.plot(time,values,'-')
 	plt.savefig(f'/var/www/html/{columns[col]}.png')
+	print(f'Saved /var/www/html/{columns[col]}.png')
 
-read_from_db()
-graph_data(1)
-graph_data(2)
-graph_data(3)
-graph_data(4)
+for i in range(1,5):
+	graph_data(i)
 c.close()
 conn.close()
