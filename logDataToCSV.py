@@ -7,6 +7,8 @@
 
 import serial, string 		# for reading serial data from photoresistor
 import csv, time 		# for saving to csv, + datestamps
+from datetime import datetime	# better datestamping
+from datetime import timezone
 import board, adafruit_ahtx0	# i2c imports from Adafruit example code for AHTx0
 import wiringpi			# provides GPIO input interrupts
 
@@ -22,7 +24,8 @@ def fetch_and_log():
 
 	### Fetch
 
-	time_now = time.time()
+	time_unix = time.time()
+	time_conventional = datetime.fromtimestamp(time_unix, tz=timezone.utc) 
 
 	with serial.Serial('/dev/ttyACM0', 115200, timeout=1) as ser: 	# fetch data from serial device
 		ser.write(b'o')						# write a line to return a line
@@ -36,15 +39,13 @@ def fetch_and_log():
 	else:
 		gpio_voltage = 0
 
-
-
 	### Log
 
 	with open(f"{filename}","a") as myfile:
 		writer = csv.writer(myfile,delimiter=",")
-		newrow = ["%0.1f" % time.time(), "%0.1f" % sensor.temperature,"%0.1f" % sensor.relative_humidity, ambient_light, gpio_voltage]
+		newrow = ["%0.1f" % time_now, "%0.1f" % sensor.temperature,"%0.1f" % sensor.relative_humidity, ambient_light, gpio_voltage]
 		writer.writerow(newrow)
-		print(newrow)
+		print(f"{time_conventional} | {newrow}")
 
 def elapse_remaining_interval():
 	time_elapsed = time.time() - time_now	
