@@ -28,7 +28,7 @@ while True:
 		with serial.Serial('/dev/ttyACM0', 115200, timeout=1) as ser:
 			ser.write(b'o')						# write a line to return a line
 			ser_bytes = ser.readline()				# read a line
-			ambient_light = ser_bytes.decode("utf-8","strict").rstrip())	# store what was read (0 - 4095)
+			ambient_light = ser_bytes.decode("utf-8","strict").rstrip()	# store what was read (0 - 4095)
 
 		with open(f"{filename}","a") as myfile:
 			writer = csv.writer(myfile,delimiter=",")
@@ -41,8 +41,8 @@ while True:
 
 	time_elapsed = time.time() - time_now	
 	
-	with (log_interval - time_elapsed) as t: 
+	t = log_interval - time_elapsed 
 
-		if t > 0 and t <= log_interval:
-			time.sleep(t)
+	if t > 0 and t <= log_interval:
+		time.sleep(t)
 
