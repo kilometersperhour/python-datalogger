@@ -44,4 +44,4 @@ while True:
 	except:
 		print("KeyboardInterrupt\n")
 		break
-	time.sleep(0.8)
+	time.sleep(1)
