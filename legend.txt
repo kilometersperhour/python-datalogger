@@ -1,1 +1,1 @@
-time,temp,humidity,light,pir
+Unix_Time,Temperature,Relative_Humidity,Ambient_Light,PIR_Voltage

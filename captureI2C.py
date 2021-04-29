@@ -1,11 +1,5 @@
 #!/usr/bin/python3
 
-# SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
-# SPDX-License-Identifier: MIT
-
-"""
-Basic `AHTx0` example test
-"""
 import serial, csv
 import time
 import board

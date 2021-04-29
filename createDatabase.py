@@ -7,4 +7,4 @@ c = conn.cursor()
 
 c.execute('''CREATE TABLE Datalogger ([Unix_Time] real,[Temperature] real,[Relative_Humidity] real,[Ambient_Light] real,[PIR_Voltage] real)''')
 
-conn.commit()
+conn.commit
