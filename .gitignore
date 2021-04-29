@@ -1,1 +1,10 @@
 *.csv
+captureGPIO.py
+captureI2C.py
+captureSerial.py
+createDatabase.py
+data.csv
+logDataToCSV_test.py
+my.db
+notes.txt
+superbackup
