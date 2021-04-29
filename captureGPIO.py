@@ -1,5 +1,10 @@
 #!/usr/bin/python3
 
+# Miles Martin - ECE 331
+# Project 3 - Datalogger
+# Program: captureGPIO.py
+# Purpose: Collect data from GPIO-based sensor and print to screen
+
 import wiringpi
 PIN_TO_SENSE = 17
 
