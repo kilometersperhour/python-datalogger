@@ -10,30 +10,39 @@ import csv, time 		# for saving to csv, + datestamps
 import board, adafruit_ahtx0	# i2c imports from Adafruit example code for AHTx0
 
 filename = "data.csv"
+log_interval = 5
 
 # Create sensor object, communicating over the board's default I2C bus
 i2c = board.I2C()
 sensor = adafruit_ahtx0.AHTx0(i2c)
 
+
+
 while True:
 #	print("\nTemperature: %0.1f C" % sensor.temperature)
 #	print("Humidity: %0.1f %%" % sensor.relative_humidity)
+	time_now = time.time()
+	ambient_light = 4096
+
 	try:
+		with serial.Serial('/dev/ttyACM0', 115200, timeout=1) as ser:
+			ser.write(b'o')						# write a line to return a line
+			ser_bytes = ser.readline()				# read a line
+			ambient_light = ser_bytes.decode("utf-8","strict").rstrip())	# store what was read (0 - 4095)
+
 		with open(f"{filename}","a") as myfile:
 			writer = csv.writer(myfile,delimiter=",")
-			newrow = [time.time(),"%0.1f" % sensor.temperature,"%0.1f" % sensor.relative_humidity,0,0]
+			newrow = [time_now,"%0.1f" % sensor.temperature,"%0.1f" % sensor.relative_humidity,ambient_light,0]
 			writer.writerow(newrow)
 			print(newrow)
 	except:
 		print("KeyboardInterrupt\n")
 		break
-	time.sleep(1)
 
-with serial.Serial('/dev/ttyACM0', 115200, timeout=1) as ser:
+	time_elapsed = time.time() - time_now	
+	
+	with (log_interval - time_elapsed) as t: 
 
-	while True:
-		ser.write(b'o')						# write a line to return a line
-		ser_bytes = ser.readline()				# read a line
-		print(ser_bytes.decode("utf-8","strict").rstrip())	# pretty-print what was read
-		time.sleep(1)						# repeat in one second
+		if t > 0 and t <= log_interval:
+			time.sleep(t)
 
