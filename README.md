@@ -1,5 +1,7 @@
 # datalogger
 
+ATTENTION: Run ./run.py to update the webserver's images.
+
 A datalogger is used to provide sensor data for display. The sensor data is presented graphically via a Linux-Apache2-Sqlite3 webserver stack.
 
 Sensors include heat, humidity, ambient light, and a PIR (passive infrared) sensor.
